@@ -1,0 +1,136 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// FEITO ==============================================================
+model Cliente {
+  idCliente    Int      @id @default(autoincrement())
+  nomeCliente  String
+  dtNascimento DateTime
+  cpf          String   @unique
+  logradouro   String?
+  bairro       String?
+  cidade       String?
+  estado       String?
+  cep          String?
+  genero       String?
+  email        String?
+  numTelefone  String?
+  ativo        Int?
+
+  @@map("cliente")
+}
+
+// FEITO ==============================================================
+model Aspnetroleclaim {
+  id         Int     @id @default(autoincrement())
+  roleId     String
+  claimType  String?
+  claimValue String?
+
+  @@map("aspnetroleclaims")
+}
+
+// FEITO ==============================================================
+model Aspnetuserrole {
+  id           String     @id @default(uuid())
+  userId       Aspnetuser @relation(fields: [aspnetuserId], references: [id])
+  roleId       Aspnetrole @relation(fields: [aspnetroleId], references: [id])
+  aspnetuserId String
+  aspnetroleId String
+
+  @@map("aspnetuserroles")
+}
+// FAZER ESSE POR ULTIMO ==============================================================
+
+// FEITO ==============================================================
+model Aspnetuserclaim {
+  id         Int     @id @default(autoincrement())
+  userId     String
+  claimType  String?
+  claimValue String?
+
+  @@map("aspnetuserclaims")
+}
+
+// FEITO ==============================================================
+model Aspnetrole {
+  id               String           @id @default(uuid())
+  name             String?
+  normalizedName   String?
+  concurrencyStamp String?
+  Aspnetuserrole   Aspnetuserrole[]
+
+  @@map("aspnetroles")
+}
+
+// FEITO ==============================================================
+model Aspnetuser {
+  id                   String           @id @default(uuid())
+  userName             String?
+  normalizedUserName   String?
+  email                String?
+  normalizedEmail      String?
+  emailConfirmed       Int
+  passwordHash         String?
+  securityStamp        String?
+  concurrencyStamp     String?
+  phoneNumber          String?
+  phoneNumberConfirmed String?
+  twoFactorEnabled     Int
+  lockoutEnd           DateTime
+  lockoutEnabled       Int
+  accessFailedCount    Int
+  perfil               String?
+  Aspnetuserrole       Aspnetuserrole[]
+
+  @@map("aspnetusers")
+}
+
+// FEITO ==============================================================
+model Funcionario {
+  idFuncionario   Int      @id @default(autoincrement())
+  nomeFuncionario String
+  dtNascimento    DateTime
+  cpf             String @unique
+  genero          String
+  email           String
+  perfil          String
+  senha           String
+  ativo           Int
+
+  @@map("funcionario")
+}
+
+
+// FEITO ==============================================================
+model Procedimento {
+  idProcedimento        Int      @id @default(autoincrement())
+  nomeProcedimento      String
+  descricaoProcedimento String
+  valorProcedimento     Float
+  dtRetorno             DateTime
+  ativo                 Int
+
+  @@map("procedimento")
+}
+
+// FEITO ==============================================================
+model Produto {
+  idProduto         Int      @id @default(autoincrement())
+  nomeProduto       String
+  dtValidadeProduto DateTime
+  valorProduto      Float
+  estoqueProduto    Int
+  ativo             Int
+
+  @@map("produto")
+}
